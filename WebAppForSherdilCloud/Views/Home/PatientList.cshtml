@@ -1,0 +1,86 @@
+﻿@model List<Patient>
+@{
+    ViewData["Title"] = "Patients List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid flex-grow-1 container-p-y text-dark">
+    <div id="container">
+        <div class="card shadow bg-warning-darker">
+            <div class="card-header">
+                <div class="d-flex justify-content-between">
+                    <div class="">
+                        <a asp-action="AddPatient" class="btn btn-primary">Add Patient</a>
+                    </div>
+                    <div class="">
+                        <h3 class="text-center">Patients List</h3>
+                    </div>
+                    <div class=""></div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row" id="">
+                    <div class="col-lg-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Count > 0)
+                                {
+                                    for (int i = 0; i < Model.Count; i++)
+                                    {
+                                        var pat = Model[i];
+                                        <tr>
+                                            <td>@pat.FirstName @pat.LastName</td>
+                                            <td>@pat.Email</td>
+                                            <td>@pat.PhoneNo</td>
+                                            <td>
+                                                <a asp-action="EditPatient" asp-route-Id="@pat.Id" class="btn btn-primary">Edit</a>
+                                                <button type="button" class="btn btn-danger delPatient" data-id="@pat.Id">Del</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-center bg-info">No Result Found</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('.delPatient').on('click', function () {
+            debugger;
+            var Id = $(this).attr('data-id');
+            var url = "@Url.Action("DeletePatient", "Home")";
+            var row = $(this).parents('tr');
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: { patientId: Id}
+            }).done(function (response) {
+                if (response.success) {
+                    alert(response.message);
+                    $(row).remove();
+                } else {
+                    alert(response.message);
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+            })
+        });
+    });
+</script>

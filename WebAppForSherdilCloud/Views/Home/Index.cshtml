@@ -1,0 +1,72 @@
+﻿@model Dashboard 
+@{
+    ViewData["Title"] = "My Clinic";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid flex-grow-1 container-p-y text-dark">
+    <div id="container">
+        <div class="card shadow bg-warning-darker">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="text-center">My Clinic Stats</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row" id="">
+                    <div class="col-4">
+                        <div class="card border-primary mb-3" style="max-width: 18rem;">
+                            <div class="card-header">Doctors</div>
+                            <div class="card-body text-primary">
+                                <h4 class="card-title">@Model.DoctorsCount</h4>
+                                <p class="card-text">Available Doctors</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card border-primary mb-3" style="max-width: 18rem;">
+                            <div class="card-header">Patients</div>
+                            <div class="card-body text-primary">
+                                <h4 class="card-title">@Model.PatientsCount</h4>
+                                <p class="card-text">Available Patients</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card border-primary mb-3" style="max-width: 18rem;">
+                            <div class="card-header">Appointments</div>
+                            <div class="card-body text-primary">
+                                <h4 class="card-title">@Model.TotalAppointments</h4>
+                                <p class="card-text">Appointments Scheduled</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#btnSubmit').on('click', function () {
+            var form = $('#addPatientForm');
+            var url = "@Url.Action("AddPatient", "Home")";
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: form.serialize()
+            }).done(function (response) {
+                if (response.success) {
+                    alert(response.message);
+                } else {
+                    alert(response.message);
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+            })
+        });
+    });
+</script>

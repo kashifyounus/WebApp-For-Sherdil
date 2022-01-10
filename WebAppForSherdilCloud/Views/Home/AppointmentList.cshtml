@@ -1,0 +1,89 @@
+﻿@model List<Appointment> 
+@{
+    ViewData["Title"] = "Appointment List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid flex-grow-1 container-p-y text-dark">
+    <div id="container">
+        <div class="card shadow bg-warning-darker">
+            <div class="card-header">
+                <div class="d-flex justify-content-between">
+                    <div class="">
+                        <a asp-action="AddAppointment" class="btn btn-primary">Add Appointment</a>
+                    </div>
+                    <div class="">
+                        <h3 class="text-center">Appointment List</h3>
+                    </div>
+                    <div class=""></div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row" id="">
+                    <div class="col-lg-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Doctor Name</th>
+                                    <th>Patient Name</th>
+                                    <th>Time</th>
+                                    <th>Details</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Count > 0)
+                                {
+                                    for (int i = 0; i < Model.Count; i++)
+                                    {
+                                        var app = Model[i];
+                                        <tr>
+                                            <td>@app.Doctor.FirstName @app.Doctor.LastName</td>
+                                            <td>@app.Patient.FirstName @app.Patient.LastName</td>
+                                            <td>@app.AppointmentTime</td>
+                                            <td>@app.Details</td>
+                                            <td>
+                                                <a asp-action="EditAppointment" asp-route-Id="@app.Id" class="btn btn-primary">Edit</a>
+                                                <button type="button" class="btn btn-danger delAppointment" data-id="@app.Id">Del</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4">No Result Found</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.delAppointment').on('click', function () {
+            debugger;
+            var Id = $(this).attr('data-id');
+            var url = "@Url.Action("DeleteAppointment", "Home")";
+            var row = $(this).parents('tr');
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: { Id: Id}
+            }).done(function (response) {
+                if (response.success) {
+                    alert(response.message);
+                    $(row).remove();
+                } else {
+                    alert(response.message);
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+            })
+        });
+    });
+</script>

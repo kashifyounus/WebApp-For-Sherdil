@@ -1,0 +1,131 @@
+﻿@model AppointmentVM
+@{
+    ViewData["Title"] = "Edit Appointment";
+}
+
+<div class="container-fluid flex-grow-1 container-p-y text-dark">
+    <div id="container">
+        <form id="setAppointmentForm">
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <div class="card shadow bg-warning-darker">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-12">
+                            <h3 class="text-center">Edit Appointment</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row" id="">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Select Doctor</label>
+                                        <select name="DoctorId" class="form-control">
+                                            @if (Model.Doctors != null)
+                                            {
+                                                @for (int i = 0; i < Model.Doctors.Count; i++)
+                                                {
+                                                    var doc = Model.Doctors[i];
+                                                    if (doc.Id == Model.DoctorId)
+                                                    {
+                                                        <option value="@doc.Id" selected>@doc.FirstName @doc.LastName (@doc.Email)</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@doc.Id">@doc.FirstName @doc.LastName (@doc.Email)</option>
+                                                    }
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <option value="0">No Record Found</option>
+                                            }
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Select Patient</label>
+                                        <select name="PatientId" class="form-control">
+                                            @if (Model.Patients != null)
+                                            {
+                                                @for (int i = 0; i < Model.Patients.Count; i++)
+                                                {
+                                                    var pat = Model.Patients[i];
+                                                    if (pat.Id == Model.PatientId)
+                                                    {
+                                                        <option value="@pat.Id" selected>@pat.FirstName @pat.LastName (@pat.Email)</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@pat.Id">@pat.FirstName @pat.LastName (@pat.Email)</option>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <option value="0">No Record Found</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Appointment Date</label>
+                                        @Html.TextBoxFor(m => m.AppointmentTime, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-sm ", required = "required", type = "date" })
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Appointment Details</label>
+                                        <textarea name="Details" class="form-control form-control-sm" cols="5">@Model.Details</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-end">
+                        <div>
+                            <a asp-action="PatientList" class="btn btn-secondary">Back</a>
+                            <button type="button" id="btnSaveChanges" class="btn btn-success">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        $('#btnSaveChanges').on('click', function () {
+            var form = $('#setAppointmentForm');
+            var url = "@Url.Action("EditAppointment", "Home")";
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: form.serialize()
+            }).done(function (response) {
+                if (response.success) {
+                    alert(response.message);
+                } else {
+                    alert(response.message);
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+            })
+        });
+    });
+</script>

@@ -1,0 +1,113 @@
+﻿@model Doctor 
+@{
+    ViewData["Title"] = "Edit Doctor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid flex-grow-1 container-p-y text-dark">
+    <div id="container">
+        <form id="doctorEditForm">
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <div class="card shadow bg-warning-darker">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-12">
+                            <h3 class="text-center">Edit Doctor</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row" id="">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="form-label">First Name</label>
+                                        <input type="text" name="FirstName" id="" value="@Model.FirstName" class="form-control form-control-sm " />
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Last Name</label>
+                                        <input type="text" name="LastName" id="" value="@Model.LastName" class="form-control form-control-sm " />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Speciality</label>
+                                        <select class="form-control" id="Speciality"
+                                                asp-for="Speciality"
+                                                asp-items="Html.GetEnumSelectList<DoctorSpeciality>()">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="form-label">PhoneNo</label>
+                                        <input type="text" name="PhoneNo" id="" value="@Model.PhoneNo" class="form-control form-control-sm " />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" name="Email" id="" value="@Model.Email" class="form-control form-control-sm " />
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Date of Birth</label>
+                                        <input type="date" name="DOB" id="" value="@Model.DOB" class="form-control form-control-sm " />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Address</label>
+                                        <input type="text" name="Address" id="" value="@Model.Address" class="form-control form-control-sm " />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-end">
+                        <div>
+                            <a asp-action="DoctorList" class="btn btn-secondary">Back</a>
+                            <button type="button" id="btnSaveChange" class="btn btn-success">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        $('#btnSaveChange').on('click', function () {
+            var form = $('#doctorEditForm');
+            var url = "@Url.Action("EditDoctor", "Home")";
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: form.serialize()
+            }).done(function (response) {
+                if (response.success) {
+                    alert(response.message);
+                } else {
+                    alert(response.message);
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+            })
+        });
+    });
+</script>
